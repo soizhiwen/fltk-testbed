@@ -78,13 +78,12 @@ helm install extractor ./charts/extractor \
 
 # Port forward Tensorboard
 EXTRACTOR_POD_NAME=$(kubectl get pods -n test -l "app.kubernetes.io/name=fltk.extractor" -o jsonpath="{.items[0].metadata.name}")
-echo http://localhost:6006/
 kubectl -n test port-forward $EXTRACTOR_POD_NAME 6006:6006
 
 
 # Run deployment
-ORCHESTRATOR_EXPERIMENT="${PROJECT_DIR}/configs/distributed_tasks/example_arrival_config.json"
-ORCHESTRATOR_CONFIGURATION="${PROJECT_DIR}/configs/example_cloud_experiment.json"
+ORCHESTRATOR_EXPERIMENT=$PROJECT_DIR/configs/distributed_tasks/example_arrival_config.json
+ORCHESTRATOR_CONFIGURATION=$PROJECT_DIR/configs/example_cloud_experiment.json
 
 helm install flearner ./charts/orchestrator \
     --namespace test -f charts/fltk-values.yaml \
