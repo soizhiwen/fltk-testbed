@@ -82,8 +82,8 @@ kubectl -n test port-forward $EXTRACTOR_POD_NAME 6006:6006
 
 
 # Run deployment
-ORCHESTRATOR_EXPERIMENT=$PROJECT_DIR/configs/distributed_tasks/example_arrival_config.json
-ORCHESTRATOR_CONFIGURATION=$PROJECT_DIR/configs/example_cloud_experiment.json
+ORCHESTRATOR_EXPERIMENT=$PROJECT_DIR/configs/distributed_tasks/qpec_arrival_config.json
+ORCHESTRATOR_CONFIGURATION=$PROJECT_DIR/configs/qpec_cloud_experiment.json
 
 helm install flearner ./charts/orchestrator \
     --namespace test -f charts/fltk-values.yaml \
