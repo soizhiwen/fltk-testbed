@@ -31,7 +31,7 @@ IMAGE='fltk'
 IMAGE_NAME="${DOMAIN}/${PROJECT_ID}/${IMAGE}:latest"
 
 # Start the cluster
-minikube start --cpus 6 --memory 10240
+minikube start --cpus 4 --memory 8192
 # e.g.  NAMESPACE     NAME
 #       kube-system   coredns-5d78c9869d-8b78w
 #       kube-system   etcd-minikube
@@ -80,9 +80,9 @@ helm install extractor ./charts/extractor \
 EXTRACTOR_POD_NAME=$(kubectl get pods -n test -l "app.kubernetes.io/name=fltk.extractor" -o jsonpath="{.items[0].metadata.name}")
 kubectl -n test port-forward $EXTRACTOR_POD_NAME 6006:6006
 
-
 # Run deployment
-ORCHESTRATOR_EXPERIMENT=$PROJECT_DIR/configs/distributed_tasks/qpec_arrival_config.json
+EXP_NAME=exp_2
+ORCHESTRATOR_EXPERIMENT=$PROJECT_DIR/configs/distributed_tasks/$EXP_NAME.json
 ORCHESTRATOR_CONFIGURATION=$PROJECT_DIR/configs/qpec_cloud_experiment.json
 
 helm install flearner ./charts/orchestrator \
@@ -92,14 +92,34 @@ helm install flearner ./charts/orchestrator \
 # e.g.  NAMESPACE NAME
 #       test      fl-server
 
+# Get all pending pods
+kubectl get pods -n test --field-selector=status.phase=Pending
+
+# Delete selected pods
+kubectl get pods -n test --no-headers=true --field-selector=status.phase=Pending | \
+awk '/trainjob/{print $1}' | \
+xargs  kubectl delete -n test pod --force
+
+# Delete kubeflow deployment
+kubectl delete -n kubeflow deployment training-operator
+
+# Delete all deployments
+kubectl delete deployment --all --all-namespaces
+
+# Uninstall flearner
+helm uninstall -n test flearner
+
 # Download data from the extractor
 cd $PROJECT_DIR
 mkdir logging
 kubectl cp -n test $EXTRACTOR_POD_NAME:/opt/federation-lab/logging ./logging
+
+# Get the configmaps of the experiment
+kubectl describe configmaps -n test > ./logging/$EXP_NAME/configmaps.txt
 
 # Uninstall extractor
 helm uninstall -n test extractor
 
 minikube stop
 
-# minikube delete
+minikube delete
