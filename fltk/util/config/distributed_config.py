@@ -189,7 +189,7 @@ class DistributedConfig:
         """
         base_log = Path(self.execution_config.tensorboard.record_dir)
         model, dataset, identifier = learn_params.model, learn_params.dataset, learn_params.identifier
-        experiment_dir = Path(f"{self.execution_config.experiment_prefix}/{identifier}_{experiment_id}/{model}_{dataset}")
+        experiment_dir = Path(f"{self.execution_config.experiment_prefix}/{identifier}/{experiment_id}/{model}_{dataset}")
         return base_log.joinpath(experiment_dir)
 
     def get_data_path(self) -> Path:
