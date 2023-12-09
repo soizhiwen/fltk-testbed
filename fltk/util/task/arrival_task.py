@@ -44,6 +44,7 @@ class ArrivalTask(_ArrivalTask):
     network: defs.Nets = field(compare=False)
     dataset: defs.Dataset = field(compare=False)
     loss_function: str = field(compare=False)
+    identifier: str = field(compare=False)
     seed: int = field(compare=False)
     replication: int = field(compare=False)
     type_map: "Optional[FrozenOrderedDict[str, int]]" = field(compare=False)
@@ -229,6 +230,7 @@ class DistributedArrivalTask(ArrivalTask):
                 priority=arrival.get_priority(),
                 dataset=arrival.get_dataset(),
                 loss_function=arrival.task.network_configuration.loss_function,
+                identifier=arrival.task.identifier,
                 seed=random.randint(0, 2**32 - 2),
                 replication=replication,
                 type_map=FrozenOrderedDict({
@@ -265,6 +267,7 @@ class FederatedArrivalTask(ArrivalTask):
                 network=arrival.get_network(),
                 dataset=arrival.get_dataset(),
                 loss_function=arrival.task.network_configuration.loss_function,
+                identifier=arrival.task.identifier,
                 seed=arrival.task.seed,
                 replication=replication,
                 type_map=FrozenOrderedDict({

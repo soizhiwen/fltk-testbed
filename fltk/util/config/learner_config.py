@@ -69,6 +69,7 @@ def get_safe_loader() -> Type[yaml.SafeLoader]:
 class LearnerConfig:
     """ """
     replication: int = field(metadata=dict(required=False, missing=-1))
+    identifier: str = field(metadata=dict(required=False, missing='job'))
     batch_size: int = field(metadata=dict(required=False, missing=128))
     test_batch_size: int = field(metadata=dict(required=False, missing=128))
     cuda: bool = field(metadata=dict(required=False, missing=False))
