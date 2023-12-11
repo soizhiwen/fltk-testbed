@@ -261,10 +261,11 @@ class DistClient(DistNode):
         @rtype: None
         """
         if self.config.execution_config.tensorboard.active:
+            self.tb_writer.add_scalar('accuracy per epoch',
+                                      epoch_data.accuracy,
+                                      epoch)
+            
             self.tb_writer.add_scalar('training loss per epoch',
                                       epoch_data.loss_train,
                                       epoch)
 
-            self.tb_writer.add_scalar('accuracy per epoch',
-                                      epoch_data.accuracy,
-                                      epoch)
