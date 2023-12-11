@@ -238,8 +238,8 @@ class Orchestrator(DistNode, abc.ABC):
                 if job_status and job_status in {'Completed', 'Failed', 'Succeeded'}:
                     logging.info(f"{task.id} was completed with status: {job_status}, moving to completed")
                     task_to_move.add(task)
-                else:
-                    logging.info(f"Waiting for {task.id} to complete, {self.pending_tasks.qsize()} pending, {self._arrival_generator.arrivals.qsize()} arrivals")
+                # else:
+                #     logging.info(f"Waiting for {task.id} to complete, {self.pending_tasks.qsize()} pending, {self._arrival_generator.arrivals.qsize()} arrivals")
             self.completed_tasks.update(task_to_move)
             self.deployed_tasks.difference_update(task_to_move)
             time.sleep(self.SLEEP_TIME)
