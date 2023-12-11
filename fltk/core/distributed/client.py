@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 import datetime
 import logging
 from pathlib import Path
@@ -268,4 +269,5 @@ class DistClient(DistNode):
             self.tb_writer.add_scalar('training loss per epoch',
                                       epoch_data.loss_train,
                                       epoch)
+            time.sleep(5)
 
