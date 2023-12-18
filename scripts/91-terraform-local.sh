@@ -114,7 +114,7 @@ helm uninstall -n test extractor
 # Uninstall flearner
 helm uninstall -n test flearner
 
-# Delete selected pods
+# Delete completed pods
 kubectl get pods -n test --no-headers=true --field-selector=status.phase=Succeeded | \
 awk '/trainjob/{print $1}' | \
 xargs kubectl delete -n test pod --force
