@@ -1,21 +1,5 @@
 source /usr/local/bin/.venv/bin/activate
 
-# ModuleNotFoundError: No module named '_lzma'
-apt -y install liblzma-dev
-pip install backports.lzma
-nano /usr/local/lib/python3.9/lzma.py
-### Before modification
-# from _lzma import *
-# from _lzma import _encode_filter_properties, _decode_filter_properties
-
-### After modification
-# try:
-#     from _lzma import *
-#     from _lzma import _encode_filter_properties, _decode_filter_properties
-# except ImportError:
-#     from backports.lzma import *
-#     from backports.lzma import _encode_filter_properties, _decode_filter_properties
-
 # Download datasets
 python -m fltk extractor configs/example_cloud_experiment.json
 rm -rf ./data/*.tar.gz
@@ -25,7 +9,7 @@ rm -rf ./data/MNIST/raw/*.gz
 PROJECT_DIR="/home/engineer/fltk-testbed"
 TERRAFORM_DEPENDENCIES_DIR="${PROJECT_DIR}/terraform/terraform-dependencies-local"
 
-PROJECT_ID="test-bed-fltk" # Change PROJECT_ID if needed
+PROJECT_ID="test-bed-fltk"
 DOMAIN="grc.io"
 IMAGE='fltk'
 IMAGE_NAME="${DOMAIN}/${PROJECT_ID}/${IMAGE}:latest"
@@ -62,11 +46,6 @@ terraform -chdir=$TERRAFORM_DEPENDENCIES_DIR apply -auto-approve
 
 # Build the docker container with buildkit
 docker build --platform linux/amd64 ./ --tag gcr.io/test-bed-fltk/fltk
-# In case you have issues with the command above, in a seperate terminal run
-# DOCKER_BUILDKIT=1 docker build \
-#    --platform linux/amd64 <fltk-directory> \
-#    --tag gcr.io/test-bed-fltk/fltk
-# minikube image load gcr.io/test-bed-fltk/fltk
 
 # Deploy extractor (--set overwrites values from "fltk-values.yaml")
 helm install extractor ./charts/extractor \
@@ -81,7 +60,7 @@ EXTRACTOR_POD_NAME=$(kubectl get pods -n test -l "app.kubernetes.io/name=fltk.ex
 kubectl -n test port-forward $EXTRACTOR_POD_NAME 6006:6006
 
 # Run deployment
-EXP_NAME=exp_8
+EXP_NAME=exp_21
 ORCHESTRATOR_EXPERIMENT=$PROJECT_DIR/configs/distributed_tasks/$EXP_NAME.json
 ORCHESTRATOR_CONFIGURATION=$PROJECT_DIR/configs/qpec_cloud_experiment.json
 

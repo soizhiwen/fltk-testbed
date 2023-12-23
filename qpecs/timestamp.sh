@@ -1,5 +1,5 @@
 LOG_DIR="/home/engineer/fltk-testbed/logging"
-EXP_NAME="exp_8"
+EXP_NAME="exp_23"
 
 cd $LOG_DIR/$EXP_NAME
 
